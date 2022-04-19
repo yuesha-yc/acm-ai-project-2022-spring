@@ -5,6 +5,20 @@ from data.StartingDataset import StartingDataset
 from networks.StartingNetwork import StartingNetwork
 from train_functions.starting_train import starting_train
 
+import pandas as pd
+
+def generateDataset():
+    data_path = os.getcwd() + "/data/humpback-whale-identification/train"
+    label_path = os.getcwd() + "/data/humpback-whale-identification/train.csv"
+    df = pd.read_csv(label_path)
+    train = df.sample(frac=0.8,random_state=200)
+    test = df.drop(train.index)
+    #print("train")
+    #print(train)
+    #print("test")
+    #print(test)
+    return train, test
+
 
 def main():
     # Get command line arguments
@@ -17,8 +31,10 @@ def main():
     print("Batch size:", constants.BATCH_SIZE)
 
     # Initalize dataset and model. Then train the model!
-    train_dataset = StartingDataset()
-    val_dataset = StartingDataset()
+    train, test = generateDataset()
+
+    train_dataset = StartingDataset(train)
+    val_dataset = StartingDataset(test)
     model = StartingNetwork()
     starting_train(
         train_dataset=train_dataset,
@@ -31,3 +47,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
