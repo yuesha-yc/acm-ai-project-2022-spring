@@ -1,5 +1,5 @@
 __pycache__
 .vscode
-
+data/humpback-whale-identification/
 training_summaries
 .DS_Store
