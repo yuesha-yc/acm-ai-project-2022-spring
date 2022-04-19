@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-
+# Residual Block
 class Residual(torch.nn.Module):
     """
     Residual block.
