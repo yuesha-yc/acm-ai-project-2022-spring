@@ -43,7 +43,8 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
             # TODO: Backpropagation and gradient descent
             #print('batch' + batch)
             images, labels = batch
-
+            print(type(images))
+            print(type(labels))
             # Move inputs over to GPU
             images = images.to(device)
             labels = labels.to(device)

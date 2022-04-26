@@ -5,6 +5,9 @@ import os
 import pandas as pd
 import sys
 
+from label_generator import id_to_label
+
+
 DATA_PATH = "data/humpback-whale-identification/train/"
 
 
@@ -37,8 +40,8 @@ class StartingDataset(torch.utils.data.Dataset):
 
         image_tensor = transforms.ToTensor()(image)
         print(image_tensor.shape)
+        label = id_to_label(self.labels[index])
 
-        label = self.labels[index]
         return image_tensor, label
         '''
         inputs = torch.zeros([3, 224, 224])

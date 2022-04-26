@@ -7,22 +7,25 @@ from train_functions.starting_train import starting_train
 
 import pandas as pd
 
+import label_generator
+
+
 def generateDataset():
     data_path = os.getcwd() + "/data/humpback-whale-identification/train"
     label_path = os.getcwd() + "/data/humpback-whale-identification/train.csv"
+
     df = pd.read_csv(label_path)
-    train = df.iloc[0:20000]        
+
+    train = df.iloc[0:20000]
     test = df.iloc[20001:25000]
-    #print("train")
-    #print(train)
-    #print("test")
-    #print(test)
+
     return train, test
 
 
 def main():
     # Get command line arguments
-    hyperparameters = {"epochs": constants.EPOCHS, "batch_size": constants.BATCH_SIZE}
+    hyperparameters = {"epochs": constants.EPOCHS,
+                       "batch_size": constants.BATCH_SIZE}
 
     # TODO: Add GPU support. This line of code might be helpful.
     # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -40,7 +43,7 @@ def main():
 
     # print('test')
     # print(train_dataset[13761])
-    
+
     model = StartingNetwork()
     starting_train(
         train_dataset=train_dataset,
@@ -53,4 +56,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
