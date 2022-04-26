@@ -32,9 +32,12 @@ class StartingDataset(torch.utils.data.Dataset):
             print(f"Failed to open {index}") 
             id = "fffde072b.jpg"
         image = Image.open(DATA_PATH + id)
+        image = image.convert('RGB')
+        image = image.resize((600, 1050))
 
         image_tensor = transforms.ToTensor()(image)
-        # TODO: reshape image_tensor
+        print(image_tensor.shape)
+
         label = self.labels[index]
         return image_tensor, label
         '''
