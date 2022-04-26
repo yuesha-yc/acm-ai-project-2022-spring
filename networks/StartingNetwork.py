@@ -63,38 +63,54 @@ class StartingNetwork(torch.nn.Module):
 
     def __init__(self):
         super().__init__()
-        self.fc = nn.Linear(224 * 224 * 3, 1)
-        # add cnn layers here
-        self.conv1 = nn.Sequential(
-            nn.Conv3d(224 * 224 * 3, 224 * 244 * 3, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm3d(3),
-            nn.ReLU()
-        )
+        # Stem Layers
+        self.conv1 = nn.Conv2d(224 * 224 * 3, 112 * 112 * 64, kernel_size=7, stride=2, padding=3, filters=64)
         
+        # input size = 112x112x64
+        # output size = 56x56x64
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-        
-        self.sigmoid = nn.Sigmoid()
-        
+        # Residual Layers
+        self.res1 = Residual(in_channels=3, out_channels=64, stride=1)
+        self.res2 = Residual(in_channels=64, out_channels=128, stride=2)
+        self.res3 = Residual(in_channels=128, out_channels=256, stride=2)
+        self.res4 = Residual(in_channels=256, out_channels=512, stride=2)
 
+        # Global average pooling
+        self.avgpool = nn.AvgPool2d(kernel_size=7, stride=1)
+        # Fully connected layer
+        self.fc = nn.Linear(512, 1)
+        # Softmax
+        self.softmax = nn.Softmax()
 
 
     def forward(self, x):
-        x = self.flatten(x)
+        # Stem Layers
+        x = self.conv1(x)
+        x = self.maxpool(x)
+        # Residual Layers
+        x = self.res1(x)
+        x = self.res2(x)
+        x = self.res3(x)
+        x = self.res4(x)
+        # Global average pooling
+        x = self.avgpool(x)
         x = self.fc(x)
-        x = self.sigmoid(x)
+        x = self.softmax(x)
         return x
 
 if __name__ == "__main__":
+    print("Starting Network")
     # With square kernels and equal stride
     # non-square kernels and unequal stride and with padding
     # m = nn.Conv3d(16, 33, (3, 5, 2), stride=(2, 1, 1), padding=(4, 2, 0))
 
-    m = nn.Conv3d(16, 33, 3, stride=2)
-    input = torch.randn(20, 16, 10, 50, 100)
-    output = m(input)
-    print(output.size())
+    # m = nn.Conv3d(16, 33, 3, stride=2)
+    # input = torch.randn(20, 16, 10, 50, 100)
+    # output = m(input)
+    # print(output.size())
 
-    m = nn.Conv1d(16, 33, 3, stride=2)
-    input = torch.randn(20, 16, 50)
-    output = m(input)
-    print(output.size())
+    # m = nn.Conv1d(16, 33, 3, stride=2)
+    # input = torch.randn(20, 16, 50)
+    # output = m(input)
+    # print(output.size())
