@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 
-# Residual Block
 class Residual(torch.nn.Module):
     """
     Residual block.
@@ -10,6 +9,7 @@ class Residual(torch.nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):
         super(Residual, self).__init__()
 
+        # Convolutional layer 1
         self.conv1 = nn.Conv2d(
             in_channels=in_channels,
             out_channels=out_channels,
@@ -19,6 +19,8 @@ class Residual(torch.nn.Module):
         )
         self.bn1 = nn.BatchNorm2d(num_features=out_channels)
         self.relu = nn.ReLU()
+
+        # Convolutional layer 2
         self.conv2 = nn.Conv2d(
             in_channels=out_channels,
             out_channels=out_channels,
@@ -28,6 +30,7 @@ class Residual(torch.nn.Module):
         )
         self.bn2 = nn.BatchNorm2d(num_features=out_channels)
 
+        # Shortcut
         if stride != 1 or in_channels != out_channels:
             self.shortcut = nn.Sequential(
                 nn.Conv2d(
@@ -39,18 +42,22 @@ class Residual(torch.nn.Module):
             )
 
     def forward(self, x):
+        # Route 1
         out = self.conv1(x)
         out = self.bn1(out)
         out = self.relu(out)
         out = self.conv2(out)
         out = self.bn2(out)
 
+        # Route 2
         if hasattr(self, "shortcut"):
             shortcut = self.shortcut(x)
         else:
             shortcut = x
 
         out += shortcut
+
+        # ReLU activation
         out = self.relu(out)
 
         return out
