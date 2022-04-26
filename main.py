@@ -11,8 +11,8 @@ def generateDataset():
     data_path = os.getcwd() + "/data/humpback-whale-identification/train"
     label_path = os.getcwd() + "/data/humpback-whale-identification/train.csv"
     df = pd.read_csv(label_path)
-    train = df.sample(frac=0.8,random_state=200)
-    test = df.drop(train.index)
+    train = df.iloc[0:20000]        
+    test = df.iloc[20001:25000]
     #print("train")
     #print(train)
     #print("test")
@@ -32,9 +32,15 @@ def main():
 
     # Initalize dataset and model. Then train the model!
     train, test = generateDataset()
+    # print(train)
+    # print(test)
 
     train_dataset = StartingDataset(train)
     val_dataset = StartingDataset(test)
+
+    # print('test')
+    # print(train_dataset[13761])
+    
     model = StartingNetwork()
     starting_train(
         train_dataset=train_dataset,

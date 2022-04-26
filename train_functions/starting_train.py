@@ -20,16 +20,19 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
     batch_size, epochs = hyperparameters["batch_size"], hyperparameters["epochs"]
 
     # Initialize dataloaders
-    train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=batch_size, shuffle=True
-    )
-    val_loader = torch.utils.data.DataLoader(
-        val_dataset, batch_size=batch_size, shuffle=True
-    )
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True )
+
+    val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
 
     # Initalize optimizer (for gradient descent) and loss function
     optimizer = optim.Adam(model.parameters())
     loss_fn = nn.CrossEntropyLoss()
+
+
+    if torch.cuda.is_available(): # Check if GPU is available
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
 
     step = 0
     for epoch in range(epochs):
@@ -38,6 +41,25 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
         # Loop over each batch in the dataset
         for batch in tqdm(train_loader):
             # TODO: Backpropagation and gradient descent
+            print('batch' + batch)
+            images, labels = batch
+
+            # Move inputs over to GPU
+            images = images.to(device)
+            labels = labels.to(device)
+
+            # Forward propagation
+            outputs = model(images) # Same thing as model.forward(images)
+
+            # What shape does outputs have?
+
+            # Backprop
+            loss = loss_fn(outputs, labels)
+            loss.backward()       # Compute gradients
+            optimizer.step()      # Update all the weights with the gradients you just calculated
+            optimizer.zero_grad() # Clear gradients before next iteration      
+            print('Epoch:', epoch, 'Loss:', loss.item())      
+
 
             # Periodically evaluate our model + log to Tensorboard
             if step % n_eval == 0:
