@@ -70,8 +70,15 @@ class StartingNetwork(torch.nn.Module):
 
     def __init__(self):
         super().__init__()
+        # Whale image tensor size = 660 x 1050 x 3
+
+        # Input tensor size = 224x224x3
+
+        # Conv2D Input-Output Size:
+        # Hout = [(Hin - kernel_size + 2*padding) / stride] + 1
+
         # Stem Layers
-        self.conv1 = nn.Conv2d(224 * 224 * 3, 112 * 112 * 64, kernel_size=7, stride=2, padding=3, filters=64)
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3)
         
         # input size = 112x112x64
         # output size = 56x56x64
@@ -121,3 +128,9 @@ if __name__ == "__main__":
     # input = torch.randn(20, 16, 50)
     # output = m(input)
     # print(output.size())
+
+    m = nn.Conv2d(3, 64, kernel_size=7, stride=2)
+    input = torch.randn(1, 3, 224, 224)
+    output = m(input)
+    print(output.size())
+    print(output)
