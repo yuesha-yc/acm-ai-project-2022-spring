@@ -48,7 +48,8 @@ class StartingNetwork(torch.nn.Module):
 
     def __init__(self):
         super().__init__()
-        # Input tensor size = 224x224x3
+        # batch size = 32, channels = 3, height = 224, width = 224
+        # Input tensor size = 32x224x224x3
 
         # Conv2D Input-Output Size:
         # Hout = [(Hin - kernel_size + 2*padding) / stride] + 1
@@ -67,11 +68,16 @@ class StartingNetwork(torch.nn.Module):
         self.res2 = Residual(64, 128, stride=2, use_1x1Conv=True)
         self.res3 = Residual(128, 256, stride=2, use_1x1Conv=True)
         self.res4 = Residual(256, 512, stride=2, use_1x1Conv=True)
-
+        
+        # batch size = 32, channels = 512, height = 7, width = 7
         # Global average pooling
         self.avgpool = nn.AvgPool2d(kernel_size=7, stride=1)
+
+        # batch size = 32, channels = 512, height = 1, width = 1
         # Fully connected layer
-        self.fc = nn.Linear(1, 10)
+        self.fc = nn.Linear(512, 5005)
+
+        # batch size = 32, channels = 5005, height = 1, width = 1
         # Softmax
         self.softmax = nn.Softmax()
 
