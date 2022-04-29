@@ -84,10 +84,10 @@ class StartingNetwork(torch.nn.Module):
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         # Residual Layers
-        self.res1 = Residual(64, 128, stride=2)
-        self.res2 = Residual(128, 256, stride=2)
-        self.res3 = Residual(256, 512, stride=2)
-        self.res4 = Residual(512, 1024, stride=2)
+        self.res1 = Residual(64, 64, stride=1)
+        self.res2 = Residual(64, 128, stride=2)
+        self.res3 = Residual(128, 256, stride=2)
+        self.res4 = Residual(256, 512, stride=2)
 
         # Global average pooling
         self.avgpool = nn.AvgPool2d(kernel_size=7, stride=1)
