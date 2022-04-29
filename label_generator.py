@@ -1,13 +1,15 @@
 import pandas as pd
 import os
 
+from constants import KAGGLE_LABEL_PATH
+
 id_to_label_dict = {}
 label_to_id_dict = {}
 
 data_path = os.getcwd() + "/data/humpback-whale-identification/train"
 label_path = os.getcwd() + "/data/humpback-whale-identification/train.csv"
 
-df = pd.read_csv(label_path)
+df = pd.read_csv(KAGGLE_LABEL_PATH)
 
 ids = df["Id"]
 for id in ids:

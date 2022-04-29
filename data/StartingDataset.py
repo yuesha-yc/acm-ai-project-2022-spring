@@ -5,11 +5,8 @@ import os
 import pandas as pd
 import sys
 
+from constants import KAGGLE_DATA_PATH, DATA_PATH
 from label_generator import id_to_label
-
-
-DATA_PATH = "data/humpback-whale-identification/train/"
-
 
 class StartingDataset(torch.utils.data.Dataset):
     """
@@ -34,7 +31,7 @@ class StartingDataset(torch.utils.data.Dataset):
             #sys.exit('failed to open')
             print(f"Failed to open {index}") 
             id = "fffde072b.jpg"
-        image = Image.open(DATA_PATH + id)
+        image = Image.open(KAGGLE_DATA_PATH + id)
         image = image.convert('RGB')
         image = image.resize((600, 1050))
 
