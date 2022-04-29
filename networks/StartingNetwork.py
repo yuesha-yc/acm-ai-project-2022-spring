@@ -70,12 +70,11 @@ class StartingNetwork(torch.nn.Module):
 
     def __init__(self):
         super().__init__()
-        # Whale image tensor size = 660 x 1050 x 3
-
         # Input tensor size = 224x224x3
 
         # Conv2D Input-Output Size:
         # Hout = [(Hin - kernel_size + 2*padding) / stride] + 1
+        # Wout = [(Win - kernel_size + 2*padding) / stride] + 1
 
         # Stem Layers
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3)
@@ -85,15 +84,15 @@ class StartingNetwork(torch.nn.Module):
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         # Residual Layers
-        self.res1 = Residual(in_channels=3, out_channels=64, stride=1)
-        self.res2 = Residual(in_channels=64, out_channels=128, stride=2)
-        self.res3 = Residual(in_channels=128, out_channels=256, stride=2)
-        self.res4 = Residual(in_channels=256, out_channels=512, stride=2)
+        self.res1 = Residual(64, 128, stride=2)
+        self.res2 = Residual(128, 256, stride=2)
+        self.res3 = Residual(256, 512, stride=2)
+        self.res4 = Residual(512, 1024, stride=2)
 
         # Global average pooling
         self.avgpool = nn.AvgPool2d(kernel_size=7, stride=1)
         # Fully connected layer
-        self.fc = nn.Linear(512, 1)
+        self.fc = nn.Linear(1024, 1)
         # Softmax
         self.softmax = nn.Softmax()
 
@@ -108,7 +107,9 @@ class StartingNetwork(torch.nn.Module):
         x = self.res3(x)
         x = self.res4(x)
         # Global average pooling
+        print(x.size())
         x = self.avgpool(x)
+        print(x.size())
         x = self.fc(x)
         x = self.softmax(x)
         return x

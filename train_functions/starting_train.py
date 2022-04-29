@@ -40,11 +40,13 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
 
         # Loop over each batch in the dataset
         for batch in tqdm(train_loader):
-            # TODO: Backpropagation and gradient descent
+            # Backpropagation and gradient descent:
+
             #print('batch' + batch)
             images, labels = batch
             print(type(images))
             print(type(labels))
+
             # Move inputs over to GPU
             images = images.to(device)
             labels = labels.to(device)
@@ -60,7 +62,6 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
             optimizer.step()      # Update all the weights with the gradients you just calculated
             optimizer.zero_grad() # Clear gradients before next iteration      
             print('Epoch:', epoch, 'Loss:', loss.item())      
-
 
             # Periodically evaluate our model + log to Tensorboard
             if step % n_eval == 0:

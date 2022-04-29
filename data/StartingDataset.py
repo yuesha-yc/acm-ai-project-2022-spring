@@ -40,6 +40,7 @@ class StartingDataset(torch.utils.data.Dataset):
 
         image_tensor = transforms.ToTensor()(image)
         print(image_tensor.shape)
+        image_tensor = transforms.Resize((224, 224))(image_tensor)
         label = id_to_label(self.labels[index])
 
         return image_tensor, label
