@@ -99,13 +99,13 @@ class StartingNetwork(torch.nn.Module):
         x = self.res4(x)
 
         # Global average pooling
-        print("After Res", x.size())
+        # print("After Res", x.size())
         x = self.avgpool(x)
-        print("After AvgPool", x.size())
+        # print("After AvgPool", x.size())
         x = self.flatten(x)
-        print("After flatten", x.size())
+        # print("After flatten", x.size())
         x = self.fc(x)
-        print("After FC", x.size())
+        # print("After FC", x.size())
         x = self.softmax(x)
-        print("After Softmax", x.size())
+        # print("After Softmax", x.size())
         return x
