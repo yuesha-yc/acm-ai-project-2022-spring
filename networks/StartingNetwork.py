@@ -115,6 +115,7 @@ class StartingNetwork(torch.nn.Module):
         print("After FC", x.size())
         x = self.softmax(x)
         print("After Softmax", x.size())
+        x = x.view(x.shape[0], -1) # -1 is inferred from other dimensions
         return x
 
 # if __name__ == "__main__":
