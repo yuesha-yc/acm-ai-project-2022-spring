@@ -92,7 +92,7 @@ class StartingNetwork(torch.nn.Module):
         # Global average pooling
         self.avgpool = nn.AvgPool2d(kernel_size=7, stride=1)
         # Fully connected layer
-        self.fc = nn.Linear(1024, 1)
+        self.fc = nn.Linear(1, 1024)
         # Softmax
         self.softmax = nn.Softmax()
 
