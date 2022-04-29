@@ -31,11 +31,11 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
 
     if torch.cuda.is_available(): # Check if GPU is available
         device = torch.device('cuda')
-        model.cuda()
     else:
         device = torch.device('cpu')
 
     step = 0
+    model = model.to(device) # Move model to GPU if available
     for epoch in range(epochs):
         print(f"Epoch {epoch + 1} of {epochs}")
 
@@ -76,7 +76,7 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
                 evaluate(val_loader, model, loss_fn)
 
             step += 1
-            
+
         print('Epoch:', epoch, 'Loss:', loss.item())      
         print()
 
