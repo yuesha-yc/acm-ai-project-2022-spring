@@ -92,30 +92,32 @@ class StartingNetwork(torch.nn.Module):
         # Global average pooling
         self.avgpool = nn.AvgPool2d(kernel_size=7, stride=1)
         # Fully connected layer
-        self.fc = nn.Linear(1, 1024)
+        self.fc = nn.Linear(1, 10)
         # Softmax
         self.softmax = nn.Softmax()
 
 
     def forward(self, x):
         # Stem Layers
-        print("Before Stem", x.size())
+        # print("Before Stem", x.size())
         x = self.conv1(x)
         x = self.maxpool(x)
+
         # Residual Layers
         x = self.res1(x)
         x = self.res2(x)
         x = self.res3(x)
         x = self.res4(x)
+
         # Global average pooling
-        print("After Res", x.size())
+        # print("After Res", x.size())
         x = self.avgpool(x)
-        print("After AvgPool", x.size())
+        # print("After AvgPool", x.size())
         x = self.fc(x)
-        print("After FC", x.size())
+        # print("After FC", x.size())
         x = self.softmax(x)
-        print("After Softmax", x.size())
-        x = x.view(x.shape[0], -1) # -1 is inferred from other dimensions
+        # print("After Softmax", x.size())
+        x = torch.reshape(x, (-1, 512 * 10)) # -1 is inferred from other dimensions
         return x
 
 # if __name__ == "__main__":
