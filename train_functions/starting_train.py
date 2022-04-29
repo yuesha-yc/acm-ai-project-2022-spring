@@ -62,7 +62,6 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
             loss.backward()       # Compute gradients
             optimizer.step()      # Update all the weights with the gradients you just calculated
             optimizer.zero_grad() # Clear gradients before next iteration      
-            print('Epoch:', epoch, 'Loss:', loss.item())      
 
             # Periodically evaluate our model + log to Tensorboard
             if step % n_eval == 0:
@@ -77,7 +76,8 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
                 evaluate(val_loader, model, loss_fn)
 
             step += 1
-
+            
+        print('Epoch:', epoch, 'Loss:', loss.item())      
         print()
 
 
