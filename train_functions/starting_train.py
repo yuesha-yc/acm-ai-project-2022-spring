@@ -31,6 +31,7 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
 
     if torch.cuda.is_available(): # Check if GPU is available
         device = torch.device('cuda')
+        model.cuda()
     else:
         device = torch.device('cpu')
 
