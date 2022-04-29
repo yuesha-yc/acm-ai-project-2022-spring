@@ -6,58 +6,36 @@ class Residual(torch.nn.Module):
     Residual block.
     """
 
-    def __init__(self, in_channels, out_channels, stride=1):
+    def __init__(self, in_channels, out_channels, use_1x1Conv=False, stride=1):
         super(Residual, self).__init__()
 
         # Convolutional layer 1
-        self.conv1 = nn.Conv2d(
-            in_channels=in_channels,
-            out_channels=out_channels,
-            kernel_size=3,
-            stride=stride,
-            padding=1,
-        )
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1)
         self.bn1 = nn.BatchNorm2d(num_features=out_channels)
-        self.relu = nn.ReLU()
 
         # Convolutional layer 2
-        self.conv2 = nn.Conv2d(
-            in_channels=out_channels,
-            out_channels=out_channels,
-            kernel_size=3,
-            stride=1,
-            padding=1,
-        )
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1)
         self.bn2 = nn.BatchNorm2d(num_features=out_channels)
 
+        self.relu = nn.ReLU()
+
         # Shortcut
-        if stride != 1 or in_channels != out_channels:
-            self.shortcut = nn.Sequential(
-                nn.Conv2d(
-                    in_channels=in_channels,
-                    out_channels=out_channels,
-                    kernel_size=1,
-                    stride=stride,
-                )
-            )
+        if use_1x1Conv:
+            self.shortcut = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride)
+        else:
+            self.shortcut = None
 
     def forward(self, x):
-        # Route 1
         out = self.conv1(x)
         out = self.bn1(out)
         out = self.relu(out)
+
         out = self.conv2(out)
         out = self.bn2(out)
 
-        # Route 2
-        if hasattr(self, "shortcut"):
-            shortcut = self.shortcut(x)
-        else:
-            shortcut = x
-
-        out += shortcut
-
-        # ReLU activation
+        if self.shortcut:
+            x = self.shortcut(x)
+        out += x
         out = self.relu(out)
 
         return out
@@ -84,7 +62,7 @@ class StartingNetwork(torch.nn.Module):
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         # Residual Layers
-        self.res1 = Residual(64, 64, stride=1)
+        self.res1 = Residual(64, 64, stride=1, use_1x1Conv=True)
         self.res2 = Residual(64, 128, stride=2)
         self.res3 = Residual(128, 256, stride=2)
         self.res4 = Residual(256, 512, stride=2)
