@@ -75,9 +75,13 @@ class StartingNetwork(torch.nn.Module):
 
         # batch size = 32, channels = 512, height = 1, width = 1
         # Fully connected layer
+        self.flatten = nn.Flatten()
+
+        # batch size = 32, channels = 512
+        # reshape
         self.fc = nn.Linear(512, 5005)
 
-        # batch size = 32, channels = 5005, height = 1, width = 1
+        # batch size = 32, channels = 5005
         # Softmax
         self.softmax = nn.Softmax()
 
@@ -98,31 +102,10 @@ class StartingNetwork(torch.nn.Module):
         print("After Res", x.size())
         x = self.avgpool(x)
         print("After AvgPool", x.size())
+        x = self.flatten(x)
+        print("After flatten", x.size())
         x = self.fc(x)
         print("After FC", x.size())
         x = self.softmax(x)
-        # print("After Softmax", x.size())
-        x = torch.reshape(x, (-1, 512 * 10)) # -1 is inferred from other dimensions
+        print("After Softmax", x.size())
         return x
-
-# if __name__ == "__main__":
-#     print("Starting Network")
-#     # With square kernels and equal stride
-#     # non-square kernels and unequal stride and with padding
-#     # m = nn.Conv3d(16, 33, (3, 5, 2), stride=(2, 1, 1), padding=(4, 2, 0))
-
-#     # m = nn.Conv3d(16, 33, 3, stride=2)
-#     # input = torch.randn(20, 16, 10, 50, 100)
-#     # output = m(input)
-#     # print(output.size())
-
-#     # m = nn.Conv1d(16, 33, 3, stride=2)
-#     # input = torch.randn(20, 16, 50)
-#     # output = m(input)
-#     # print(output.size())
-
-#     m = nn.Conv2d(3, 64, kernel_size=7, stride=2)
-#     input = torch.randn(1, 3, 224, 224)
-#     output = m(input)
-#     print(output.size())
-#     print(output)
