@@ -23,7 +23,7 @@ class StartingDataset(torch.utils.data.Dataset):
         #print(self.labels)
 
     def __getitem__(self, index):
-        print("index: " + str(index))
+        # print("index: " + str(index))
         try:
             id = self.images[index]
             self.images.to_csv('dump.csv')
@@ -36,7 +36,7 @@ class StartingDataset(torch.utils.data.Dataset):
         image = image.resize((600, 1050))
 
         image_tensor = transforms.ToTensor()(image)
-        print(image_tensor.shape)
+        # print(image_tensor.shape)
         image_tensor = transforms.Resize((224, 224))(image_tensor)
         label = id_to_label(self.labels[index])
 
