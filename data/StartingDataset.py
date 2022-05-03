@@ -20,21 +20,24 @@ class StartingDataset(torch.utils.data.Dataset):
     # iloc vs loc USE iloc
 
     def __init__(self, df):
-        self.images = np.array([])
+        print(len(df))
+        self.images = []
 
         for i, id in enumerate(df['Image']):
             print(i, id)
             image = Image.open(data_path + id)
             image = image.convert('RGB')
             image = image.resize((224, 224))
-            np.append(self.images, transforms.ToTensor()(image))
+            self.images += [transforms.ToTensor()(image)]
+            #print(self.images)
 
         self.labels = df['Id']
-        print(df)
+        #print("len", len(self.images))
+        #print(self.images)
 
     def __getitem__(self, index):
         
-        label = id_to_label(self.labels[index])
+        label = id_to_label(self.labels.iloc[index])
         image_tensor = self.images[index]
         return image_tensor, label
         '''
