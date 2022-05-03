@@ -4,42 +4,37 @@ import torchvision.transforms as transforms
 import os
 import pandas as pd
 import sys
+import numpy as np
 
 from constants import KAGGLE_DATA_PATH, DATA_PATH
 from label_generator import id_to_label
+
+data_path = DATA_PATH
+
 
 class StartingDataset(torch.utils.data.Dataset):
     """
     Dataset that contains 100000 3x224x224 black images (all zeros).
     """
 
-    #iloc vs loc USE iloc
+    # iloc vs loc USE iloc
 
-    def __init__(self, df): 
-        self.images = df['Image']
+    def __init__(self, df):
+        self.images = np.array([])
+
+        for i, id in enumerate(df['Image']):
+            print(i, id)
+            image = Image.open(data_path + id)
+            image = image.convert('RGB')
+            image = image.resize((224, 224))
+            np.append(self.images, transforms.ToTensor()(image))
+
         self.labels = df['Id']
-        #print(self.images)
-        #print(type(self.images))
-        #print(self.labels)
+        print(df)
 
     def __getitem__(self, index):
-        # print("index: " + str(index))
-        try:
-            id = self.images[index]
-            self.images.to_csv('dump.csv')
-        except:
-            #sys.exit('failed to open')
-            print(f"Failed to open {index}") 
-            id = "fffde072b.jpg"
-        image = Image.open(KAGGLE_DATA_PATH + id)
-        image = image.convert('RGB')
-        image = image.resize((224, 224))
-
-        image_tensor = transforms.ToTensor()(image)
-        # print(image_tensor.shape)
-        # image_tensor = transforms.Resize((224, 224))(image_tensor)
         label = id_to_label(self.labels[index])
-
+        image_tensor = self.images[index]
         return image_tensor, label
         '''
         inputs = torch.zeros([3, 224, 224])
