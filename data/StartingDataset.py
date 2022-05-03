@@ -9,7 +9,7 @@ import numpy as np
 from constants import KAGGLE_DATA_PATH, DATA_PATH
 from label_generator import id_to_label
 
-data_path = DATA_PATH
+data_path = KAGGLE_DATA_PATH
 
 
 class StartingDataset(torch.utils.data.Dataset):
