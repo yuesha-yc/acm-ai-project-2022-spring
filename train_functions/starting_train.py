@@ -76,7 +76,8 @@ def starting_train(train_dataset, val_dataset, model, hyperparameters, n_eval):
                 # Compute validation loss and accuracy.
                 # Log the results to Tensorboard.
                 # Don't forget to turn off gradient calculations!
-                evaluate(val_loader, model, loss_fn)
+                pass
+                # evaluate(val_loader, model, loss_fn)
 
             step += 1
 
@@ -107,7 +108,7 @@ def evaluate(val_loader, model, loss_fn):
 
     TODO!
     """
-    pass
+
     loss = 0
     total_labels = []
     total_outputs = []
