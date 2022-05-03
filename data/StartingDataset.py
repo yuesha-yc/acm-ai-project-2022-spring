@@ -36,8 +36,7 @@ class StartingDataset(torch.utils.data.Dataset):
         #print(self.images)
 
     def __getitem__(self, index):
-        
-        label = id_to_label(self.labels.iloc[index])
+        label = id_to_label(self.labels[index])
         image_tensor = self.images[index]
         return image_tensor, label
         '''
