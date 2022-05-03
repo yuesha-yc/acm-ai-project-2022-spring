@@ -33,11 +33,11 @@ class StartingDataset(torch.utils.data.Dataset):
             id = "fffde072b.jpg"
         image = Image.open(KAGGLE_DATA_PATH + id)
         image = image.convert('RGB')
-        image = image.resize((600, 1050))
+        image = image.resize((224, 224))
 
         image_tensor = transforms.ToTensor()(image)
         # print(image_tensor.shape)
-        image_tensor = transforms.Resize((224, 224))(image_tensor)
+        # image_tensor = transforms.Resize((224, 224))(image_tensor)
         label = id_to_label(self.labels[index])
 
         return image_tensor, label
