@@ -107,7 +107,7 @@ def evaluate(val_loader, model, loss_fn):
 
     TODO!
     """
-    
+    pass
     loss = 0
     total_labels = []
     total_outputs = []
