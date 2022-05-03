@@ -23,7 +23,8 @@ class StartingDataset(torch.utils.data.Dataset):
         self.images = np.array([])
 
         for i, id in enumerate(df['Image']):
-            print(i, id)
+            if (i % 1000 == 0):
+                print(i, id)
             image = Image.open(data_path + id)
             image = image.convert('RGB')
             image = image.resize((224, 224))
