@@ -104,4 +104,18 @@ def evaluate(val_loader, model, loss_fn):
 
     TODO!
     """
-    pass
+    
+    loss = 0
+    total_labels = []
+    total_outputs = []
+    with torch.no_grad():
+        for batch in tqdm(val_loader):
+            images, labels = val_loader
+            outputs = model(images)
+            loss += loss_fn(outputs, labels).mean().item()
+            total_labels += labels
+            total_outputs += outputs
+    
+    accuracy = compute_accuracy(total_outputs, total_labels)
+    
+ 
